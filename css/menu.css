@@ -1,0 +1,256 @@
+/* ===================================
+   Gandul Coffee — Menu Page Styles
+   Extends landing_page.css design tokens
+   =================================== */
+
+:root {
+  --menu-green: #1f4a34;
+  --menu-green-dark: #163a29;
+  --menu-cream-card: #f4efe6;
+  --menu-tan: #e9d2a4;
+  --menu-tan-dark: #d8b878;
+  --menu-gold: #cf9f4f;
+  --menu-border: #e7ddc9;
+}
+
+body.menu-page {
+  background: #ffffff;
+}
+
+/* ---------- Header / Nav ---------- */
+
+.menu-topbar {
+  background: var(--menu-green);
+  padding: 20px 0;
+}
+
+.menu-topbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(24px, 4vw, 56px);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.menu-nav a {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  position: relative;
+  padding-bottom: 4px;
+}
+
+.menu-nav a.is-active,
+.menu-nav a:hover {
+  color: var(--menu-tan-dark);
+}
+
+.menu-hamburger {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.menu-hamburger span {
+  width: 22px;
+  height: 2px;
+  background: #fff;
+  border-radius: 2px;
+}
+
+/* ---------- Category sections ---------- */
+
+.menu-category {
+  padding: 56px 0 12px;
+}
+
+.menu-category:first-of-type {
+  padding-top: 64px;
+}
+
+.category-title {
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(26px, 3.4vw, 36px);
+  letter-spacing: 0.02em;
+  color: var(--color-text);
+  margin-bottom: 34px;
+}
+
+.menu-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.row-arrow {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: var(--menu-tan);
+  color: var(--menu-green-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.25s ease, opacity 0.25s ease;
+}
+
+.row-arrow:hover:not(:disabled) {
+  background: var(--menu-tan-dark);
+  transform: translateY(-2px);
+}
+
+.row-arrow:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.row-arrow svg {
+  width: 18px;
+  height: 18px;
+}
+
+.menu-grid {
+  flex: 1;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 24px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 4px 4px 10px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.menu-grid::-webkit-scrollbar {
+  display: none;
+}
+
+/* ---------- Menu card ---------- */
+
+.menu-card {
+  scroll-snap-align: start;
+  background: var(--menu-cream-card);
+  border: 1px solid var(--menu-border);
+  border-radius: 18px;
+  padding: 14px 14px 20px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.menu-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 34px rgba(20, 15, 10, 0.1);
+}
+
+.menu-card-img {
+  border-radius: 10px;
+  overflow: hidden;
+  aspect-ratio: 1 / 1.05;
+  background: #12100e;
+}
+
+.menu-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.menu-card-body {
+  padding-top: 18px;
+}
+
+.menu-card-body h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 21px;
+  color: var(--color-text);
+  margin-bottom: 8px;
+}
+
+.menu-card-body p {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  font-weight: 300;
+  margin-bottom: 14px;
+}
+
+.menu-price {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--menu-gold);
+  margin-bottom: 14px;
+}
+
+.btn-tentang {
+  align-self: flex-start;
+  background: var(--menu-tan);
+  color: #5a4322;
+  border: none;
+  padding: 9px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.btn-tentang:hover {
+  background: var(--menu-tan-dark);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1024px) {
+  .menu-grid { grid-auto-columns: minmax(70%, 46%); }
+}
+
+@media (max-width: 860px) {
+  .menu-nav { display: none; }
+
+  .menu-hamburger { display: flex; }
+
+  .menu-topbar .container { justify-content: space-between; }
+
+  .menu-nav.is-open {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    top: 0;
+    background: rgba(15, 30, 22, 0.98);
+    flex-direction: column;
+    justify-content: center;
+    z-index: 200;
+  }
+}
+
+@media (max-width: 720px) {
+  .menu-grid { grid-auto-columns: minmax(78%, 1fr); }
+  .row-arrow { width: 42px; height: 42px; }
+  .menu-category { padding: 40px 0 4px; }
+  .category-title { margin-bottom: 24px; }
+}
