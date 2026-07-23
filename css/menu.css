@@ -45,12 +45,33 @@ body.menu-page {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   position: relative;
-  padding-bottom: 4px;
+  padding-bottom: 6px;
+  transition: color 0.25s ease;
 }
 
-.menu-nav a.is-active,
+.menu-nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--menu-tan-dark);
+  transition: width 0.25s ease;
+}
+
 .menu-nav a:hover {
   color: var(--menu-tan-dark);
+}
+
+.menu-nav a.is-active {
+  color: var(--menu-tan-dark);
+}
+
+.menu-nav a.is-active::after,
+.menu-nav a:hover::after {
+  width: 100%;
 }
 
 .menu-hamburger {

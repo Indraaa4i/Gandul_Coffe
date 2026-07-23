@@ -3,7 +3,18 @@
    =================================== */
 
 document.addEventListener('DOMContentLoaded', function () {
+/* ---------- Active nav state ---------- */
+  var navLinks = document.querySelectorAll('.menu-nav a[data-page]');
 
+  function setActiveLink(page) {
+    navLinks.forEach(function (link) {
+      link.classList.toggle('is-active', link.dataset.page === page);
+    });
+  }
+
+  // Halaman ini adalah halaman "Menu", jadi tab Menu selalu menyala di navbar.
+  setActiveLink('menu');
+  
   /* ---------- Mobile nav toggle ---------- */
   var hamburger = document.getElementById('menuHamburger');
   var nav = document.getElementById('menuNav');
