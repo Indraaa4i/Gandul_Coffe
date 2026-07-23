@@ -116,9 +116,69 @@ document.addEventListener('DOMContentLoaded', function () {
 
   /* ---------- Clicking a whole card also selects its detail tab ---------- */
   packageCards.forEach(function (card) {
-    card.addEventListener('click', function () {
+    card.addEventListener('click', function (e) {
+      // Jangan pindah tab kalau yang diklik adalah salah satu tombol di dalam card
+      if (e.target.closest('button')) return;
       switchDetailTab(card.dataset.package);
     });
   });
+
+  /* ---------- Modal Pemesanan Paket ---------- */
+  var orderModal = document.getElementById('orderModal');
+  var orderModalBackdrop = document.getElementById('orderModalBackdrop');
+  var orderModalClose = document.getElementById('orderModalClose');
+  var orderForm = document.getElementById('orderForm');
+  var orderPackageInput = document.getElementById('orderPackageInput');
+  var orderModalPackageName = document.getElementById('orderModalPackageName');
+  var orderSummaryPackage = document.getElementById('orderSummaryPackage');
+  var orderSummaryGuests = document.getElementById('orderSummaryGuests');
+  var orderSummaryPrice = document.getElementById('orderSummaryPrice');
+  var orderJumlahTamu = document.getElementById('orderJumlahTamu');
+
+  function openOrderModal(packageKey) {
+    var data = (typeof WEDDING_PACKAGES !== 'undefined') ? WEDDING_PACKAGES[packageKey] : null;
+    if (!data) return;
+
+    orderPackageInput.value = packageKey;
+    orderModalPackageName.textContent = data.name;
+    orderSummaryPackage.textContent = data.name;
+    orderSummaryGuests.textContent = data.guests;
+    orderSummaryPrice.textContent = data.price;
+
+    // Prefill jumlah tamu dari slider estimator, biar user tidak perlu ketik ulang
+    if (slider) {
+      orderJumlahTamu.value = slider.value >= 300 ? 300 : slider.value;
+    }
+
+    document.body.classList.add('order-modal-open');
+    orderModalBackdrop.classList.add('is-visible');
+    orderModal.classList.add('is-visible');
+  }
+
+  function closeOrderModal() {
+    document.body.classList.remove('order-modal-open');
+    orderModalBackdrop.classList.remove('is-visible');
+    orderModal.classList.remove('is-visible');
+  }
+
+  document.querySelectorAll('.btn-order').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      openOrderModal(btn.dataset.order);
+    });
+  });
+
+  if (orderModalClose) orderModalClose.addEventListener('click', closeOrderModal);
+  if (orderModalBackdrop) orderModalBackdrop.addEventListener('click', closeOrderModal);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeOrderModal();
+  });
+
+  // Kalau server menandai paket tidak valid, buka modal otomatis
+  if (orderModal && orderModal.querySelector('.order-modal-alert')) {
+    document.body.classList.add('order-modal-open');
+    orderModalBackdrop.classList.add('is-visible');
+    orderModal.classList.add('is-visible');
+  }
 
 });
