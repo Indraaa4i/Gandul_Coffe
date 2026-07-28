@@ -181,4 +181,121 @@ document.addEventListener('DOMContentLoaded', function () {
     orderModal.classList.add('is-visible');
   }
 
+  /* ---------- Submit form pemesanan -> lanjut ke WhatsApp ---------- */
+  if (orderForm) {
+    orderForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      var nama = document.getElementById('orderNama').value.trim();
+      var whatsapp = document.getElementById('orderWhatsapp').value.trim();
+      var tanggal = document.getElementById('orderTanggal').value;
+      var jumlahTamu = orderJumlahTamu.value;
+      var catatan = document.getElementById('orderCatatan').value.trim();
+      var namaPaket = orderModalPackageName.textContent;
+
+      var lines = [
+        'Halo Gandul Coffee, saya ingin memesan coffee bar untuk pernikahan.',
+        '',
+        'Paket: ' + namaPaket,
+        'Nama: ' + nama,
+        'No. WhatsApp: ' + whatsapp,
+        'Tanggal Acara: ' + (tanggal || '-'),
+        'Estimasi Tamu: ' + jumlahTamu + ' orang'
+      ];
+      if (catatan) lines.push('Catatan: ' + catatan);
+
+      var pesan = encodeURIComponent(lines.join('\n'));
+      window.open('https://wa.me/6283824158887?text=' + pesan, '_blank');
+
+      closeOrderModal();
+      orderForm.reset();
+    });
+  }
+
+  /* ---------- FAQ accordion (custom, animasi halus, satu terbuka) ---------- */
+  var faqItems = document.querySelectorAll('.faq-item');
+
+  faqItems.forEach(function (item) {
+    var question = item.querySelector('.faq-question');
+    var answer = item.querySelector('.faq-answer');
+    if (!question || !answer) return;
+
+    question.addEventListener('click', function () {
+      var isOpen = item.classList.contains('is-open');
+
+      faqItems.forEach(function (other) {
+        other.classList.remove('is-open');
+        other.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+        other.querySelector('.faq-answer').style.maxHeight = null;
+      });
+
+      if (!isOpen) {
+        item.classList.add('is-open');
+        question.setAttribute('aria-expanded', 'true');
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+      }
+    });
+  });
+
+  /* ---------- Gallery lightbox ---------- */
+  var galleryItems = Array.prototype.slice.call(document.querySelectorAll('.gallery-item'));
+  var galleryLightbox = document.getElementById('galleryLightbox');
+  var galleryLightboxBackdrop = document.getElementById('galleryLightboxBackdrop');
+  var galleryLightboxImg = document.getElementById('galleryLightboxImg');
+  var galleryLightboxCaption = document.getElementById('galleryLightboxCaption');
+  var galleryLightboxClose = document.getElementById('galleryLightboxClose');
+  var galleryPrev = document.getElementById('galleryPrev');
+  var galleryNext = document.getElementById('galleryNext');
+  var galleryIndex = 0;
+
+  function openGalleryLightbox(index) {
+    if (!galleryItems.length) return;
+    galleryIndex = index;
+    var item = galleryItems[galleryIndex];
+    var caption = item.dataset.caption || '';
+
+    galleryLightboxImg.src = item.dataset.full;
+    galleryLightboxImg.alt = caption;
+    galleryLightboxCaption.textContent = caption;
+
+    document.body.classList.add('gallery-lightbox-open');
+    galleryLightboxBackdrop.classList.add('is-visible');
+    galleryLightbox.classList.add('is-visible');
+  }
+
+  function closeGalleryLightbox() {
+    document.body.classList.remove('gallery-lightbox-open');
+    galleryLightboxBackdrop.classList.remove('is-visible');
+    galleryLightbox.classList.remove('is-visible');
+  }
+
+  function stepGalleryLightbox(dir) {
+    var next = (galleryIndex + dir + galleryItems.length) % galleryItems.length;
+    openGalleryLightbox(next);
+  }
+
+  galleryItems.forEach(function (item, index) {
+    item.addEventListener('click', function () {
+      openGalleryLightbox(index);
+    });
+    item.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openGalleryLightbox(index);
+      }
+    });
+  });
+
+  if (galleryLightboxClose) galleryLightboxClose.addEventListener('click', closeGalleryLightbox);
+  if (galleryLightboxBackdrop) galleryLightboxBackdrop.addEventListener('click', closeGalleryLightbox);
+  if (galleryPrev) galleryPrev.addEventListener('click', function () { stepGalleryLightbox(-1); });
+  if (galleryNext) galleryNext.addEventListener('click', function () { stepGalleryLightbox(1); });
+
+  document.addEventListener('keydown', function (e) {
+    if (!galleryLightbox || !galleryLightbox.classList.contains('is-visible')) return;
+    if (e.key === 'Escape') closeGalleryLightbox();
+    if (e.key === 'ArrowLeft') stepGalleryLightbox(-1);
+    if (e.key === 'ArrowRight') stepGalleryLightbox(1);
+  });
+
 });
